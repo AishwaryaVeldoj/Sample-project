@@ -10,7 +10,7 @@ app.use(express.json());
 
 //routes
 
-app.use("/api/auth", authRoutes);
+app.use("api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello , welcome to website</h1>");
