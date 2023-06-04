@@ -1,36 +1,34 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { useAuth } from "../context/auth";
-
-const Login = () => {
+import toast from "react-hot-toast";
+import axios from "axios";
+const Register = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [address, setAddress] = React.useState("");
+  const [phone, setPhone] = React.useState("");
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+        "http://localhost:8000/api/auth/register",
         {
+          name,
           email,
           password,
+          address,
+          phone,
         }
       );
-      const { data } = response;
-      if (data.success) {
-        setAuth({
-          ...auth,
-          user: data.user,
-        });
-        toast.success("Login successful!");
-        navigate("/homepage");
-      } else {
-        toast.error(data.message);
-      }
+      if (response.data.success) {
+        toast.success(response.data.message);
+        navigate("/");
+      } else toast.error(response.data.message);
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong..");
@@ -47,7 +45,17 @@ const Login = () => {
               style={{ borderRadius: "1rem" }}
             >
               <div className="card-body p-5 text-center">
-                <h3 className="mb-5">Sign in</h3>
+                <h3 className="mb-5">Register Here</h3>
+                <div className="form-outline mb-4">
+                  <input
+                    type="text"
+                    id="typeEmailX-2"
+                    className="form-control form-control-lg"
+                    placeholder="Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
                 <div className="form-outline mb-4">
                   <input
                     type="email"
@@ -68,21 +76,30 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
+                <div className="form-outline mb-4">
+                  <input
+                    type="text"
+                    id="typeEmailX-2"
+                    className="form-control form-control-lg"
+                    placeholder="Address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+                <div className="form-outline mb-4">
+                  <input
+                    type="text"
+                    id="typeEmailX-2"
+                    className="form-control form-control-lg"
+                    placeholder="Phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
                 <button
                   className="btn btn-primary btn-lg btn-block w-100 p-2"
                   type="submit"
-                  onClick={handleLogin}
-                >
-                  Login
-                </button>
-                <hr className="my-4" />
-                <label className="mb-4">Not a member?</label>
-                <br />
-                <button
-                  className="btn btn-lg btn-block btn-primary w-100 p-2"
-                  style={{ backgroundColor: "#dd4b39" }}
-                  type="submit"
-                  onClick={() => navigate("/register")}
+                  onClick={handleRegister}
                 >
                   Register
                 </button>
@@ -95,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
